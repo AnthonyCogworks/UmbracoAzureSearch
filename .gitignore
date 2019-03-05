@@ -164,7 +164,7 @@ media/*
 packages/
 Moriyama.AzureSearch.Umbraco/Umbraco_Client/
 Moriyama.AzureSearch.Umbraco/Umbraco/
-Moriyama.AzureSearch.Umbraco/Config/
+#Moriyama.AzureSearch.Umbraco/Config/
 Moriyama.AzureSearch.Umbraco/App_Data/TEMP/ExamineIndexes/
 Moriyama.AzureSearch.Umbraco/App_Data/TEMP/PluginCache/
 Moriyama.AzureSearch.Umbraco/App_Data/umbraco.config
