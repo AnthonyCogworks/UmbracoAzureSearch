@@ -30,23 +30,6 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Controllers
             return _azureSearchServiceClient.GetConfiguration();
         }
 
-        [HttpGet]
-        public bool ServiceName(string value)
-        {
-            var config = _azureSearchServiceClient.GetConfiguration();
-            config.SearchServiceName = value;
-            _azureSearchServiceClient.SaveConfiguration(config);
-            return true;
-        }
-
-        [HttpGet]
-        public bool ServiceApiKey(string value)
-        {
-            var config = _azureSearchServiceClient.GetConfiguration();
-            config.SearchServiceAdminApiKey = value;
-            _azureSearchServiceClient.SaveConfiguration(config);
-            return true;
-        }
 
         public string GetTestConfig()
         {
