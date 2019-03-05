@@ -27,21 +27,6 @@
 	};
 	$scope.loadIndexes();
     
-    $scope.updateServiceName = function() {
-
-        $scope.updating = true;
-        $http.get('/umbraco/backoffice/api/AzureSearchApi/ServiceName?value=' + escape($scope.config.SearchServiceName)).then(function (response) {
-            $scope.updating = false;
-        });
-    };
-
-    $scope.updateServiceApiKey = function () {
-
-        $scope.updating = true;
-        $http.get('/umbraco/backoffice/api/AzureSearchApi/ServiceApiKey?value=' + escape($scope.config.SearchServiceAdminApiKey)).then(function (response) {
-            $scope.updating = false;
-        });  
-    };
 
 	$scope.testConfig = function () {
 		$scope.resetUi();

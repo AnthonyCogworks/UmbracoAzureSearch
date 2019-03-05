@@ -19,16 +19,14 @@
 			<tr>
 				<td width="25%">Search Service Name</td>
 				<td>
-					<input type="text" ng-model="config.SearchServiceName" />
-					<input type="button" class="btn btn-default" value="Update" ng-click="updateServiceName()" />
+					{{config.SearchServiceName}}
 				</td>
 			</tr>
 			<tr>
 				<td>Search Service Admin Api Key</td>
-				<td>
-					<input type="text" ng-model="config.SearchServiceAdminApiKey" />
-					<input type="button" class="btn btn-default" value="Update" ng-click="updateServiceApiKey()" />
-				</td>
+                <td>
+                    {{config.SearchServiceAdminApiKey}}
+                </td>
 			</tr>
 			<tr>
 				<td>Index Name</td>
