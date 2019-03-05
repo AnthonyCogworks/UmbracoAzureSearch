@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Search;
 using Moriyama.AzureSearch.Umbraco.Application.Models;
 using Newtonsoft.Json;
+using System.Configuration;
 using System.IO;
 
 namespace Moriyama.AzureSearch.Umbraco.Application
@@ -17,6 +18,9 @@ namespace Moriyama.AzureSearch.Umbraco.Application
         {
             _path = path;
             _config = JsonConvert.DeserializeObject<AzureSearchConfig>(File.ReadAllText(Path.Combine(path, @"config\AzureSearch.config")));
+
+            _config.SearchServiceName = ConfigurationManager.AppSettings["AzureSearch:ServiceName"];
+            _config.SearchServiceAdminApiKey = ConfigurationManager.AppSettings["AzureSearch:ApiKey"];
         }
 
         public void SaveConfiguration(AzureSearchConfig config)
