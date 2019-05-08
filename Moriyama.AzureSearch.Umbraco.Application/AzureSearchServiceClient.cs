@@ -16,6 +16,7 @@ using Moriyama.AzureSearch.Umbraco.Application.Extensions;
 using Umbraco.Web.Models;
 using log4net;
 using System.Reflection;
+using Moriyama.AzureSearch.Umbraco.Application.Umbraco;
 
 namespace Moriyama.AzureSearch.Umbraco.Application
 {
@@ -584,15 +585,16 @@ namespace Moriyama.AzureSearch.Umbraco.Application
                         {
                             // #filth #sorrymarc
                             JObject jObject = JObject.Parse(value.ToString());
-                            var tokens = jObject.SelectTokens("..value");
+                            var tokens = jObject.SelectTokens("..value").Where(x => x != null);
 
                             try
                             {
-                                var values = tokens.Where(x => x != null).Select(x => (x as JValue).Value);
+                                var gridIndexHelper = new GridIndexHelper(_logger);
+                                var gridValues = gridIndexHelper.GetIndexValues(value.ToString(), field.Name);
+
+                                var values = gridValues.Select(x => x.Value);
                                 value = string.Join(" ", values);
-                                value = Regex.Replace(value.ToString(), "<.*?>", String.Empty);
-                                value = value.ToString().Replace(Environment.NewLine, " ");
-                                value = value.ToString().Replace(@"\n", " ");
+
                             }
                             catch (Exception ex)
                             {
@@ -607,6 +609,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application
 
             return c;
         }
+
 
         private Document FromComputedFields(Document document, IContentBase content, SearchField[] customFields)
         {
