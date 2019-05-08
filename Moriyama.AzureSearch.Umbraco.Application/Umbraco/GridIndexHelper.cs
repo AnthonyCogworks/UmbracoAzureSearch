@@ -28,7 +28,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
             var result = new List<KeyValuePair<string, string>>();
 
             //if there is a value, it's a string and it's detected as json
-            if (!(value is string stringValue) || !stringValue.DetectIsJson())
+            if (!value.DetectIsJson())
             {
                 return result;
             }
@@ -38,7 +38,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
             try
             {
                 //get all values and put them into a single field (using JsonPath)
-                var gridVal = JsonConvert.DeserializeObject<GridValue>(stringValue);
+                var gridVal = JsonConvert.DeserializeObject<GridValue>(value);
                 var rows = gridVal.Sections.SelectMany(x => x.Rows);
 
                 foreach (var row in rows)
@@ -91,9 +91,9 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
         private void AppendJsonObjectData(JToken controlVal, string propertyAlias, string rowName, StringBuilder sb, List<KeyValuePair<string, string>> result)
         {
             // convert to dictionary so we can inspect values
-            var moduleItems = GetModuleItems(controlVal);
+            var controlItems = GetControlItems(controlVal);
 
-            foreach (var item in moduleItems)
+            foreach (var item in controlItems)
             {
                 if (item.Value is string stringValue)
                 {
@@ -117,9 +117,11 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
                 else
                 {
                     // do nothing because we are not expecting other types of data
+                    _logger.Warn($"Azure Indexer: Unexpected data type {item.Key}");
                 }
             }
         }
+
 
         private IEnumerable<UrlPickerLink> GetUrlPickers(JArray jArray)
         {
@@ -138,7 +140,10 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
             }
         }
 
-        private IEnumerable<KeyValuePair<string, object>> GetModuleItems(JToken controlVal)
+        /// <summary>
+        /// Converts JToken into a dictionary. This is pretty nasty, but it works.
+        /// </summary>
+        private IEnumerable<KeyValuePair<string, object>> GetControlItems(JToken controlVal)
         {
             try
             {
