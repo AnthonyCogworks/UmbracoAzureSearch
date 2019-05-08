@@ -66,7 +66,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
                     //result.Add(new KeyValuePair<string, IEnumerable<object>>($"{UmbracoExamineIndex.RawFieldPrefix}{propertyAlias}", new[] { rawVal }));
 
                     //index the property with the combined/cleaned value
-                    result.Add(new KeyValuePair<string, string>(propertyAlias, sb.ToString()));
+                    //result.Add(new KeyValuePair<string, string>(propertyAlias, sb.ToString()));
                 }
             }
             catch (InvalidCastException ex)
