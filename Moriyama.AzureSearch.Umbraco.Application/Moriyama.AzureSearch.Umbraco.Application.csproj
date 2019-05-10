@@ -280,7 +280,8 @@
     <Compile Include="Models\SearchFacet.cs" />
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Helper\SearchContentExtensions.cs" />
-    <Compile Include="Models\UrlPickerLink.cs" />
+    <Compile Include="Models\Indexing\NestedContent.cs" />
+    <Compile Include="Models\Indexing\UrlPickerLink.cs" />
     <Compile Include="Umbraco\CustomApplicationEventHandler.cs" />
     <Compile Include="Controllers\AzureSearchApiController.cs" />
     <Compile Include="Interfaces\IAzureSearchIndexClient.cs" />

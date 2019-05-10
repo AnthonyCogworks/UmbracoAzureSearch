@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Moriyama.AzureSearch.Umbraco.Application.Models;
+using Moriyama.AzureSearch.Umbraco.Application.Models.Indexing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Umbraco.Core;
@@ -106,13 +107,8 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
                 }
                 else if (item.Value is JArray jArray) 
                 {
-                    // value might be a url picker, so let's try to convert it
-                    var urlPickers = GetUrlPickers(jArray);
-
-                    foreach (var picker in urlPickers)
-                    {
-                        AppendValue(propertyAlias, rowName, picker.Name, sb, result);
-                    }
+                    // value might be a url picker or something else complex, so let's try to convert it
+                     AppendComplexValue(jArray, propertyAlias, rowName, sb, result);
                 }
                 else
                 {
@@ -123,20 +119,31 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
         }
 
 
-        private IEnumerable<UrlPickerLink> GetUrlPickers(JArray jArray)
+        private void AppendComplexValue(JArray jArray, string propertyAlias, string rowName, StringBuilder sb, List<KeyValuePair<string, string>> result)
         {
             try
             {
-                var urlPickers = jArray.ToObject<IEnumerable<UrlPickerLink>>()
-                                        .Where(x => !string.IsNullOrWhiteSpace(x.Url));
+                // try to convert to NestedContent
+                var nestedContent = jArray.ToObject<IEnumerable<NestedContent>>()
+                    .Where(x => !string.IsNullOrWhiteSpace(x.NcContentTypeAlias));
 
-                return urlPickers;
+                if (!nestedContent.Any()) { return; }
+
+                // Note: This is very specific to the F&P implementation. 
+                // A better solution would be to make this more generic.
+                // eg. Don't convert the UrlPicker until much later. This would mean we need to traverse the JArray, 
+                // then attempt to convert each item to a strongly typed object.            
+                foreach (var item in nestedContent)
+                {
+                    foreach(var picker in item.UrlPicker)
+                    { 
+                        AppendValue(propertyAlias, rowName, picker.Name, sb, result);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex);
-
-                return new List<UrlPickerLink>();
             }
         }
 
