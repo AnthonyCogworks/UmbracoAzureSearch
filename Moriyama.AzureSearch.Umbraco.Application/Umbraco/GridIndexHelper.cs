@@ -135,7 +135,9 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
                 // then attempt to convert each item to a strongly typed object.            
                 foreach (var item in nestedContent)
                 {
-                    foreach(var picker in item.UrlPicker)
+                    AppendValue(propertyAlias, rowName, item.Description, sb, result);
+
+                    foreach (var picker in item.UrlPicker)
                     { 
                         AppendValue(propertyAlias, rowName, picker.Name, sb, result);
                     }
