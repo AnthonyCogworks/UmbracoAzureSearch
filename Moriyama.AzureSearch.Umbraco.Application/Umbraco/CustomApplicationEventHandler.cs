@@ -30,6 +30,8 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
 
             ContentService.Saved += ContentServiceSaved;
             ContentService.Published += ContentServicePublished;
+            ContentService.UnPublished += ContentServiceUnPublished;
+            ContentService.Moved += ContentServiceMoved;
             ContentService.Trashed += ContentServiceTrashed;
             ContentService.Deleted += ContentServiceDeleted;
             ContentService.EmptiedRecycleBin += ContentServiceEmptiedRecycleBin;
@@ -40,6 +42,26 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
 
             MemberService.Saved += MemberServiceSaved;
             MemberService.Deleted += MemberServiceDeleted;
+        }
+
+        private void ContentServiceMoved(IContentService sender, MoveEventArgs<IContent> e)
+        {
+            var azureSearchServiceClient = AzureSearchContext.Instance.SearchIndexClient;
+
+            foreach (var entity in e.MoveInfoCollection)
+            {
+                azureSearchServiceClient.ReIndexContent(entity.Entity);
+            }
+        }
+
+        private void ContentServiceUnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
+        {
+            var azureSearchServiceClient = AzureSearchContext.Instance.SearchIndexClient;
+
+            foreach (var entity in e.PublishedEntities)
+            {
+                azureSearchServiceClient.Delete(entity.Id);
+            }
         }
 
         private void ContentServiceEmptiedRecycleBin(IContentService sender, RecycleBinEventArgs e)
