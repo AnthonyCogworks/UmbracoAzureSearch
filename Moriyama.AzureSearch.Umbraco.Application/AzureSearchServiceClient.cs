@@ -472,15 +472,12 @@ namespace Moriyama.AzureSearch.Umbraco.Application
             result.Add("WriterId", content.WriterId);
             result.Add("ContentTypeAlias", content.ContentType.Alias);
 
-            if (content.Published)
-            {
-                var helper = new UmbracoHelper(UmbracoContext.Current);
-                var publishedContent = helper.TypedContent(content.Id);
+            var helper = new UmbracoHelper(UmbracoContext.Current);
+            var publishedContent = helper.TypedContent(content.Id);
 
-                if (publishedContent != null)
-                {
-                    result.Add("Url", publishedContent.Url);
-                }
+            if (publishedContent != null && !string.IsNullOrWhiteSpace(publishedContent.Url))
+            {
+                result.Add("Url", publishedContent.Url);
             }
 
             // SLOW:
