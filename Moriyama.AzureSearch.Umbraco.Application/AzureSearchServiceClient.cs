@@ -100,12 +100,14 @@ namespace Moriyama.AzureSearch.Umbraco.Application
                 contentIds = db.Fetch<int>(@"select distinct cmsContent.NodeId
                     from cmsContent, umbracoNode where
                     cmsContent.nodeId = umbracoNode.id and
-                    umbracoNode.nodeObjectType = 'C66BA18E-EAF3-4CFF-8A22-41B16D66A972'");
+                    umbracoNode.nodeObjectType = 'C66BA18E-EAF3-4CFF-8A22-41B16D66A972' and
+                    umbracoNode.path NOT LIKE '%-20%'");
 
                 mediaIds = db.Fetch<int>(@"select distinct cmsContent.NodeId
                     from cmsContent, umbracoNode where
                     cmsContent.nodeId = umbracoNode.id and
-                    umbracoNode.nodeObjectType = 'B796F64C-1F99-4FFB-B886-4BF4BC011A9C'");
+                    umbracoNode.nodeObjectType = 'B796F64C-1F99-4FFB-B886-4BF4BC011A9C' and
+                    umbracoNode.path NOT LIKE '%-21%'");
 
                 memberIds = db.Fetch<int>(@"select distinct cmsContent.NodeId
                     from cmsContent, umbracoNode where
@@ -652,7 +654,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application
                  new Field("Name", DataType.String) { IsFilterable = true, IsSortable = true, IsSearchable = true, IsRetrievable = true},
                  new Field("Key", DataType.String) { IsSearchable = true, IsRetrievable = true},
 
-                 new Field("Url", DataType.String) { IsSearchable = true, IsRetrievable = true},
+                 new Field("Url", DataType.String) { IsSearchable = true, IsRetrievable = true, IsFilterable = true},
                  new Field("MemberEmail", DataType.String) { IsSearchable = true },
 
                  new Field("IsContent", DataType.Boolean) { IsFilterable = true, IsFacetable = true },
