@@ -100,12 +100,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application.Umbraco
 
             foreach (var entity in e.SavedEntities)
             {
-                var hasPublishedVersion = entity.HasPublishedVersion;
-
-                if (!hasPublishedVersion)
-                {
-                    azureSearchServiceClient.ReIndexContent(entity);
-                }
+                azureSearchServiceClient.ReIndexContent(entity);
             }
         }
 

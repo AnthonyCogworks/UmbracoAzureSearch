@@ -469,7 +469,7 @@ namespace Moriyama.AzureSearch.Umbraco.Application
             result.Add("IsContent", true);
             result.Add("IsMedia", false);
             result.Add("IsMember", false);
-
+            
             result.Add("Published", content.Published);
             result.Add("WriterId", content.WriterId);
             result.Add("ContentTypeAlias", content.ContentType.Alias);
@@ -480,8 +480,9 @@ namespace Moriyama.AzureSearch.Umbraco.Application
             if (publishedContent != null && !string.IsNullOrWhiteSpace(publishedContent.Url))
             {
                 result.Add("Url", publishedContent.Url);
+                result["Published"] = true;
             }
-
+            
             // SLOW:
             //var isProtected = UmbracoContext.Current.Application.Services.PublicAccessService.IsProtected(content.Path);
             //result.Add("IsProtected", content.ContentType.Alias);
